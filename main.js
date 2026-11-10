@@ -31,7 +31,7 @@ async function getUsers() {
         searchInput.value = "";
 
     } catch (error) {
-        statusLine.textContent = "Failed to load users, please try again."
+        statusLine.textContent = "Failed to load users. Please try again."
         userList.innerHTML = "";
         searchInput.hidden = true;
         users = [];
