@@ -1,10 +1,18 @@
 .user-card {
-    list-style: none;
-    background-color: lightgreen;
+    background-color: white;
     padding: 16px;
     border: 1px solid black;
     margin-bottom: 20px;
-    box-shadow: 10px 10px black;
-    max-width: 25%;
-    font-family: 'Times New Roman', Times, serif;
+    box-shadow: 0 2px 10px black;
+    max-width: 400px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+body {
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: lightgray;
 }
