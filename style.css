@@ -1,0 +1,10 @@
+.user-card {
+    list-style: none;
+    background-color: lightgreen;
+    padding: 16px;
+    border: 1px solid black;
+    margin-bottom: 20px;
+    box-shadow: 10px 10px black;
+    max-width: 25%;
+    font-family: 'Times New Roman', Times, serif;
+}

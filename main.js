@@ -43,7 +43,7 @@ async function getUsers() {
 
 function searchUsers() {
     const searchTerm = searchInput.value.toLowerCase();
-
+    
     const filteredUsers = users.filter((user) => {
         return user.name.toLowerCase().includes(searchTerm);
     });
@@ -63,6 +63,8 @@ function searchUsers() {
 
 function userInfo(user) {
     const listItem = document.createElement("li"); 
+
+    listItem.classList.add("user-card");
 
     listHelper("h3", user.name, listItem);
 
