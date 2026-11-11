@@ -1,9 +1,7 @@
 .user-card {
     background-color: white;
     padding: 16px;
-    margin-bottom: 20px;
     box-shadow: 0 2px 10px black;
-    max-width: 400px;
     border-radius: 8px;
 }
 
@@ -15,4 +13,16 @@ ul {
 body {
         font-family: Arial, Helvetica, sans-serif;
         background-color: lightgray;
+}
+
+#userList {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
