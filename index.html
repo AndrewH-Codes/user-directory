@@ -11,9 +11,16 @@
     <h1>User Directory</h1>
 
     <div class="controls">
-        <button id="loadUsersButton">Load Users</button>
+        <button hidden id="reloadUsersButton">Load Users</button>
 
         <input hidden type="text" id="searchInput" placeholder="Search Users...">
+
+        <select hidden autocomplete="off" id="optionPicker">
+            <option value="" selected disabled>-- Select how to sort --</option>
+            <option value="nameA-Z">Name (A-Z)</option>
+            <option value="nameZ-A">Name (Z-A)</option>
+            <option value="cityA-Z">City (A-Z)</option>
+        </select>
     </div>
 
     <p id="status"></p>

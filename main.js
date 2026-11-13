@@ -1,14 +1,16 @@
-const loadUsersButton = document.getElementById("loadUsersButton");
+const reloadUsersButton = document.getElementById("reloadUsersButton");
 const statusLine = document.getElementById("status");
 const userList = document.getElementById("userList");
 const searchInput = document.getElementById("searchInput");
+const optionPicker = document.getElementById("optionPicker");
 let users = [];
 
 async function getUsers() {
     try {
         statusLine.textContent = "Loading users...";
 
-        loadUsersButton.disabled = true;
+        //loadUsersButton.disabled = true;
+
 
         const response = await fetch("https://jsonplaceholder.typicode.com/users");
 
@@ -28,16 +30,18 @@ async function getUsers() {
 
         searchInput.hidden = false;
 
+        optionPicker.hidden = false;
+
         searchInput.value = "";
 
     } catch (error) {
         statusLine.textContent = "Failed to load users. Please try again."
         userList.innerHTML = "";
         searchInput.hidden = true;
+        optionPicker.hidden = true;
+        reloadUsersButton.hidden = false;
         users = [];
         console.log(error);
-    } finally {
-        loadUsersButton.disabled = false;
     }
 }
 
@@ -87,5 +91,28 @@ function listHelper(type, content, listItem){
     listItem.appendChild(newElement);
 }
 
-loadUsersButton.addEventListener("click", getUsers);
+function sortHelper(){
+    const option = optionPicker.value;
+    let sortedItems = [];
+    if (option === "nameA-Z"){
+
+        sortedItems = [...users].sort((a,b) => a.name.localeCompare(b.name));
+        
+    } else if (option === "nameZ-A"){
+
+        sortedItems = [...users].sort((a,b) => b.name.localeCompare(a.name));
+
+    } else if (option === "cityA-Z"){
+
+        sortedItems = [...users].sort((a,b) => a.address.city.localeCompare(b.address.city));
+
+    }
+    userList.innerHTML = "";
+    sortedItems.forEach(item =>{
+        userInfo(item);
+    });
+}
+getUsers();
+reloadUsersButton.addEventListener("click", getUsers);
 searchInput.addEventListener("input", searchUsers);
+optionPicker.addEventListener("change", sortHelper);
