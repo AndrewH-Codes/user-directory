@@ -26,3 +26,15 @@ body {
     align-items: center;
     gap: 15px;
 }
+
+@media (max-width: 900px){
+    #userList {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px){
+    #userList {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
