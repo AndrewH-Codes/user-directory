@@ -3,34 +3,36 @@ const statusLine = document.getElementById("status");
 const userList = document.getElementById("userList");
 const searchInput = document.getElementById("searchInput");
 const optionPicker = document.getElementById("optionPicker");
+const cityPicker = document.getElementById("cityPicker");
 let users = [];
 
 async function getUsers() {
     try {
         statusLine.textContent = "Loading users...";
 
-        //loadUsersButton.disabled = true;
+        reloadUsersButton.disabled = true;
+        reloadUsersButton.hidden = true;
 
 
         const response = await fetch("https://jsonplaceholder.typicode.com/users");
 
         if (!response.ok) {
-            throw new Error("Failed to retrieve users.")
+            throw new Error("Failed to retrieve users.");
         }
 
         users = await response.json();
 
-        userList.innerHTML = "";
+        citySearchFilterDisplay();
 
-        users.forEach(user => {
-            userInfo(user);
-        });
+        fillCityFilter();
 
         statusLine.textContent = users.length + " Users successfully loaded!";
 
         searchInput.hidden = false;
 
         optionPicker.hidden = false;
+
+        cityPicker.hidden = false;
 
         searchInput.value = "";
 
@@ -39,30 +41,58 @@ async function getUsers() {
         userList.innerHTML = "";
         searchInput.hidden = true;
         optionPicker.hidden = true;
+        cityPicker.hidden = true;
         reloadUsersButton.hidden = false;
+        reloadUsersButton.disabled = false;
         users = [];
         console.log(error);
     }
 }
 
-function searchUsers() {
+function citySearchFilterDisplay() {
     const searchTerm = searchInput.value.toLowerCase();
     
-    const filteredUsers = users.filter((user) => {
+    let filteredUsers = users.filter((user) => {
         return user.name.toLowerCase().includes(searchTerm);
     });
 
     userList.innerHTML = "";
 
-    filteredUsers.forEach(user => {
-        userInfo(user);
-    });
+    const city = cityPicker.value;
+
+    if(city !== "noFilter"){
+        filteredUsers = filteredUsers.filter((user) => {
+            return user.address.city === city;
+        });
+    }
+
+    const option = optionPicker.value;
+
+    if (option === "nameA-Z"){
+
+        filteredUsers = filteredUsers.sort((a,b) => a.name.localeCompare(b.name));
+        
+    } else if (option === "nameZ-A"){
+
+        filteredUsers = filteredUsers.sort((a,b) => b.name.localeCompare(a.name));
+
+    } else if (option === "cityA-Z"){
+
+        filteredUsers = filteredUsers.sort((a,b) => a.address.city.localeCompare(b.address.city));
+
+    } 
 
     statusLine.textContent = filteredUsers.length + " Users found!";
 
     if (filteredUsers.length === 0) {
         statusLine.textContent = "No users found."
     }
+
+    filteredUsers.forEach(user => {
+        userInfo(user);
+    });
+
+
 }
 
 function userInfo(user) {
@@ -91,28 +121,24 @@ function listHelper(type, content, listItem){
     listItem.appendChild(newElement);
 }
 
-function sortHelper(){
-    const option = optionPicker.value;
-    let sortedItems = [];
-    if (option === "nameA-Z"){
+function fillCityFilter() {
+    const cities = users.map(user => user.address.city);
 
-        sortedItems = [...users].sort((a,b) => a.name.localeCompare(b.name));
-        
-    } else if (option === "nameZ-A"){
+    cities.sort();
 
-        sortedItems = [...users].sort((a,b) => b.name.localeCompare(a.name));
+    const uniqueCities = [...new Set(cities)];
 
-    } else if (option === "cityA-Z"){
-
-        sortedItems = [...users].sort((a,b) => a.address.city.localeCompare(b.address.city));
-
-    }
-    userList.innerHTML = "";
-    sortedItems.forEach(item =>{
-        userInfo(item);
-    });
+    uniqueCities.forEach(city => {
+        const cityItem = document.createElement("option");
+        cityItem.value = city;
+        cityItem.textContent = city;
+        cityPicker.appendChild(cityItem);
+    })
 }
+
+
 getUsers();
 reloadUsersButton.addEventListener("click", getUsers);
-searchInput.addEventListener("input", searchUsers);
-optionPicker.addEventListener("change", sortHelper);
+searchInput.addEventListener("input", citySearchFilterDisplay);
+optionPicker.addEventListener("change", citySearchFilterDisplay);
+cityPicker.addEventListener("change", citySearchFilterDisplay);
